@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: quick-spring
+
+server:
+  port: 8082
