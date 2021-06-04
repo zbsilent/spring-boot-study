@@ -751,56 +751,56 @@ public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySourc
 
 ```java
 public ConfigurableApplicationContext run(String... args) {
-  StopWatch stopWatch = new StopWatch();
-  stopWatch.start();
-  DefaultBootstrapContext bootstrapContext = createBootstrapContext();
-  ConfigurableApplicationContext context = null;
-  configureHeadlessProperty();
-  //获取Listeners 从META-INF/spring.factries
-  SpringApplicationRunListeners listeners = getRunListeners(args);
-  listeners.starting(bootstrapContext, this.mainApplicationClass);
-  try {
-     ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
-    //创建环境 
-    ConfigurableEnvironment environment = prepareEnvironment(listeners, bootstrapContext, applicationArguments);
-    //配置环境
-    configureIgnoreBeanInfo(environment);
-    //启动头文件 可以自定义
-    Banner printedBanner = printBanner(environment);
-    //创建应用上下文 即创建IOC容器 AnnotationConfigServletWebServerApplicationContext
-    context = createApplicationContext();
-    //设置启动器 
-    context.setApplicationStartup(this.applicationStartup);
-    //准备上下文环境 
-    //applyInitializers(context); 回调之前保存好的Initialize方法
-		//listeners.contextPrepared(context); 回调之前SpringApplicationRunListener的contextPrepared方法
-    //listeners.contextLoaded(context) 运行完成后回调所有的springApplicationRunListener他的contextLoaded方法
-    prepareContext(bootstrapContext, context, environment, listeners, applicationArguments, printedBanner);
-    //刷新容器 ioc容器初始化过程 
-    refreshContext(context);
-    
-    afterRefresh(context, applicationArguments);
-    stopWatch.stop();
-    if (this.logStartupInfo) {
-       new StartupInfoLogger(this.mainApplicationClass).logStarted(getApplicationLog(), stopWatch);
-     }
-     listeners.started(context);
-    //从ioc容器中 所有 ApplicationRunner，CommandLineRunner
-     callRunners(context, applicationArguments);
-  }
-  catch (Throwable ex) {
-     handleRunFailure(context, ex, listeners);
-     throw new IllegalStateException(ex);
-  }
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        DefaultBootstrapContext bootstrapContext = createBootstrapContext();
+        ConfigurableApplicationContext context = null;
+        configureHeadlessProperty();
+        //获取Listeners 从META-INF/spring.factries
+        SpringApplicationRunListeners listeners = getRunListeners(args);
+        listeners.starting(bootstrapContext, this.mainApplicationClass);
+        try {
+        ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+        //创建环境 
+        ConfigurableEnvironment environment = prepareEnvironment(listeners, bootstrapContext, applicationArguments);
+        //配置环境
+        configureIgnoreBeanInfo(environment);
+        //启动头文件 可以自定义
+        Banner printedBanner = printBanner(environment);
+        //创建应用上下文 即创建IOC容器 AnnotationConfigServletWebServerApplicationContext
+        context = createApplicationContext();
+        //设置启动器 
+        context.setApplicationStartup(this.applicationStartup);
+        //准备上下文环境 
+        //applyInitializers(context); 回调之前保存好的Initialize方法
+        //listeners.contextPrepared(context); 回调之前SpringApplicationRunListener的contextPrepared方法
+        //listeners.contextLoaded(context) 运行完成后回调所有的springApplicationRunListener他的contextLoaded方法
+        prepareContext(bootstrapContext, context, environment, listeners, applicationArguments, printedBanner);
+        //刷新容器 ioc容器初始化过程 
+        refreshContext(context);
 
-  try {
-     listeners.running(context);
-  }
-  catch (Throwable ex) {
-     handleRunFailure(context, ex, null);
-     throw new IllegalStateException(ex);
-  }
-  return context;}
+        afterRefresh(context, applicationArguments);
+        stopWatch.stop();
+        if (this.logStartupInfo) {
+        new StartupInfoLogger(this.mainApplicationClass).logStarted(getApplicationLog(), stopWatch);
+        }
+        listeners.started(context);
+        //从ioc容器中 所有 ApplicationRunner，CommandLineRunner
+        callRunners(context, applicationArguments);
+        }
+        catch (Throwable ex) {
+        handleRunFailure(context, ex, listeners);
+        throw new IllegalStateException(ex);
+        }
+
+        try {
+        listeners.running(context);
+        }
+        catch (Throwable ex) {
+        handleRunFailure(context, ex, null);
+        throw new IllegalStateException(ex);
+        }
+        return context;}
 ```
 
 #### ce
