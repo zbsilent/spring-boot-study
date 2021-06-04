@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Reno
  */
-//@ResponseBody
-//@Controller
-@RestController
+
+@RestController("/boot02")
 public class HelloContorller {
 
     @RequestMapping("/hello")

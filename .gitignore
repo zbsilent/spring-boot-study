@@ -9,3 +9,5 @@
 /*/mvnw.cmd
 /*/HELP.md
 /*/mvnw
+*.log
+*.gz

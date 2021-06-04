@@ -1,0 +1,62 @@
+server:
+  port: 8084
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/mysql
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 自动建表配置
+    initialization-mode: always
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 5
+      validation-query: select 1 from dual
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      filter:
+        log4j2:
+          connection-log-enabled: true
+        stat:
+          enabled: true
+          merge-sql: true
+#          log-slow-sql: true
+          slow-sql-millis: 500
+        wall:
+          enabled: true
+      web-stat-filter:
+        enabled: true
+        exclusions: "*.js,*.css,/druid/*"
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: 123456
+        url-pattern: "/druid/*"
+        allow: ""
+      max-pool-prepared-statement-per-connection-size: 20
+      use-global-data-source-stat: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  application:
+    name: sping-mybatis-jpa
+mybatis:
+  type-aliases-package: com.springstudy.db.pojo
+  configuration:
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+#    map-underscore-to-camel-case: true
+#  配置文件
+#  config-location: classpath:mybatis/**mybatis-config**.xml
+#  mapper-locations: classpath:mybatis/mapper/*.xml
+logging:
+  file:
+    name: ${spring.application.name}.log
+  pattern:
+    console: "%d{HH:mm:ss.SSS} -> %contextName [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    com:
+      springstudy:
+        db:
+          mapper: DEBUG

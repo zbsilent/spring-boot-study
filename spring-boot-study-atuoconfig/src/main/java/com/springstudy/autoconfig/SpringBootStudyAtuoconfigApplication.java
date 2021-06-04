@@ -1,17 +1,16 @@
-package com.srpingsut.quick;
+package com.springstudy.autoconfig;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
 
 /**
  * @author Reno
  */
 @SpringBootApplication
-public class SpringBootStudyQuickApplication {
+public class SpringBootStudyAtuoconfigApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootStudyQuickApplication.class, args);
+        SpringApplication.run(SpringBootStudyAtuoconfigApplication.class, args);
     }
 
 }

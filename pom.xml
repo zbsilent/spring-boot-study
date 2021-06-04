@@ -12,7 +12,11 @@
     </parent>
 
     <modules>
+        <module>spring-boot-study-atuoconfig</module>
         <module>spring-boot-study-quick</module>
+        <module>spring-boot-study-logging</module>
+        <module>spring-boot-study-database</module>
+        <module>spring-boot-study-jdks</module>
     </modules>
 
     <groupId>org.springstu</groupId>
@@ -33,6 +37,23 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--***Spring Boot 默认使用的日志框架是logback，去掉logback日志框架***-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
