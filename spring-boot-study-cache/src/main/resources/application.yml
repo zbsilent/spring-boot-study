@@ -1,0 +1,31 @@
+server:
+  port: 8087
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/jpa
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: spring-cache
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+  type-aliases-package: com.study.cache.pojo
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} -> %contextName [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: ${spring.application.name}.log
+  level:
+    root: warn
+    org.springframework.web: debug
+    org.hibernate: error
+    com.zaxxer.hikari: error
+    com.study.cache.mapper: debug
+    com.study.cache.service: debug
+    Servlet: error
+    c.s: error
