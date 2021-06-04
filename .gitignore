@@ -11,3 +11,6 @@
 /*/mvnw
 *.log
 *.gz
+/*/*/*/*/rebel.xml
+/*/*/*/rebel.xml
+out

@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: data-jpa
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/jpa
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true
+server:
+  port: 8085
+logging:
+  file:
+    name: ${spring.application.name}.log
+  pattern:
+    console: "%d{HH:mm:ss} -> [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    com:
+      springstudy:
+        jpa:
+          repository: DEBUG
