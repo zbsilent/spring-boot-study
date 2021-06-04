@@ -18,6 +18,7 @@
         <module>spring-boot-study-database</module>
         <module>spring-boot-study-jdks</module>
         <module>spring-boot-study-datajpa</module>
+        <module>reno-spring-boot-starter</module>
     </modules>
 
     <groupId>org.springstu</groupId>

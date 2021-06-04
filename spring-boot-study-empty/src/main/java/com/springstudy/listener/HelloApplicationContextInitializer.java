@@ -1,5 +1,6 @@
 package com.springstudy.listener;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import static java.lang.System.err;
