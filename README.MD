@@ -240,11 +240,126 @@ Docker Container : 独立的一个或者一组应用
 
 
 
+#### 10、 整合mybatis
+
+##### 10.1
+
+- **@MapperSacn(value=“package”)**
+- @Mapper
+
+##### 10.2 mybatis-config.xml
+
+- [mapper设置YML](#M0004)
+
+##### 10.2 mybatis设置
+
+- [自增主键](#P0004)
+
+> @Options(useGeneratedKeys = true,keyProperty = "id")
+
+##### 10.4 log4j2日志整合注意事项
+
+- [import spring-boot-start-log4j2](#YR0001)
+- [remove logback、slf4j.jar](#TC0001)
+- [application.yml configuration](#CO0001)
+
+#### 11、 JPA整合
+
+##### 11.1 JAP配置
+
+- [JPA Configuration](#JPA0001)
+
+##### 11.2 JAP配置
+
+- [继承JpaRepository来完成对数据库对操作](#JC0001)
+- [**@Query**](https://docs.spring.io/spring-data/jpa/docs/2.4.9/reference/html/#jpa.entity-persistence)
+- [@NameQuery](https://docs.spring.io/spring-data/jpa/docs/2.4.9/reference/html/#jpa.entity-persistence)
 
 
 
+#### 12、Spring Boot启动原理
+
+##### 12.1 create SpringApplication.class
+
+- 判断是否是web应用
+- [add initializers](#IMG0009)
+- [add Listeners](#IMG00101)
+- [search main method]()[^search main]
+
+##### 12.2 [operation run method](#RUN01)
+
+- 准备环境
+    - 执行[ApplicationContextInitializer.initialize()](#APP0001)
+    - 监听器<a>SrpingApplicationRunListener</a>回调<a>contextPrepared</a>
+    - 加载主配置类定义信息
+    - 监听器<a>SpringApplicationRunListener</a>回调<a>contextLoaded</a>
+- 刷新启动IOC容器
+    - 扫描加载所有的组件
+    - 包括从<a>META-INF/spring-factories</a>中获取所有<a>EnableAutoCOnfiguration</a>组件
+- 回调容器中所有的<a>AppliactionRunner</a>、<a>CommandLineRunner的run</a>方法
+- 监听器<a>SpringAppliactionRunListener</a>回调<a>finished</a>
 
 
+
+#### 13、Custom Starter
+
+##### 13.1 场景依赖什么
+
+##### 13.2 如何编写自动配置
+
+- **@Configuration**<a>set class is Config file</a>
+- **@ConditionalOnXxxx**
+- **@AutoConfigureOrder**
+- **@Bean** <a>add module to IOC</a>
+- **@EnableConfigurationProperties** add IOC
+    - *ConfigurationProperties* user<a> WebMvcProperties.class</a>bind Configuration class
+
+##### 13.3 将需要启动就加载的自动配置类 放入<a>META-INF/spring.factories</a> 中
+
+- org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    - org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\
+    -  org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\
+    - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,
+
+##### 13.4 模式
+
+- 启动器只用来依赖导入empty.jar xxx-starter  <font color="red" >— spring-boot-starter</font>
+- 专门写一个自动配置模块 xxx-starter-autoconfiguration <font color="red" >— spring-boot-starter-moduleNme</font>
+- 启动器依赖自动配置模块
+- 命名规则
+    - 后缀 <font color="red" >-spring-boot-starter</font>
+    - 模式：<font color="red" >moudle - spring-boot-starter</font>
+    - 举例：<font color="red" >mybatis-spring-boot-starter</font>
+
+### SpringBoot 高级
+
+#### _0、_ Springboot与缓存
+
+##### _0.1_ JSR-107
+
+- <a>CachingProvider</a>[^缓存提供者] 定义创建，配置，获取，管理和控制多个CacheManager
+- <a>CacheManager</a>[^缓存管理器] 定义创建，配置，获取，管理和控制多个唯一命名的Cache
+- <a>Cache</a>[^缓存组件] 一个类似Map的存储结构
+- <a>Entry</a>是一个存储中Cache的key-value对
+- <a>Expirt</a> 有效期 通过ExpirtPolicy设置
+
+
+
+#####  0.2 [Spring缓存抽象](https://docs.spring.io/spring-boot/docs/2.4.6/reference/html/spring-boot-features.html#boot-features-caching-provider)
+
+- org.springframework.cache.Cahe
+
+- org.springframework.cache.CacheManager
+- 支持JCache(JSR-107)注解
+
+---
+
+- <a>@EnableCaching</a>启用缓存
+- **@Cacheable**(cacheNames={"user"},condition = "#id>0" ,key = "#id”)`add cache`
+- **@CachePut**(cacheNames={"user"},key = "#result.userId”)`alter cache`
+- **@CacheEvict**(cacheNames={"user"},/*key = "#userId"*/allEntries = true,beforeInvocation = true)`del cache`
+
+##### 整合Redis
 
 
 
@@ -486,7 +601,207 @@ spring.datasource.druid.aop-patterns= # Spring监控AOP切入点，如x.y.z.serv
 
 ```
 
+#### <a id="P0004">add primarykey</a>
 
+```java
+@Options(useGeneratedKeys = true,keyProperty = "id")
+```
+
+#### <a id="M0004">mapper.xml for yml</a>
+
+```yml
+mybatis:
+  type-aliases-package: com.springstudy.db.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+#  配置文件
+#  config-location: classpath:mybatis/mybatis-config.xml
+#  mapper-locations: classpath:mybatis/mapper/*.xml
+
+```
+
+#### <a id= "YR0001">import spring-boot-start-log4j2</a>
+
+```yml
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-log4j2</artifactId>
+</dependency>
+```
+
+
+
+#### <a id =“TC0001">remove logback、slf4j.jar</a>
+
+```yml
+ <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-web</artifactId>
+   <!--***Spring Boot 默认使用的日志框架是logback，去掉logback日志框架***-->
+   <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-log4j2</artifactId>
+   <exclusions>
+       <exclusion>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-slf4j-impl</artifactId>
+       </exclusion>
+   </exclusions>
+</dependency>
+```
+
+
+
+#### <a id="CO0001">application.yml configuration</a>
+
+```yml
+mybatis:
+  type-aliases-package: com.springstudy.db.pojo
+  configuration:
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+logging:
+  file:
+    name: sping-xx.log
+    path: /Users/Reno/Developer/logger/newlog
+  pattern:
+    console: "%d{HH:mm:ss.SSS} -> %contextName [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    com:
+      springstudy:
+        db:
+          mapper: DEBUG
+```
+
+#### <a id="JC0001">继承JpaRepository来完成对数据库对操作</a>
+
+```java
+public interface UserRepository extends JpaRepository<User,Integer> {
+    /**
+     * 查询高段位查询
+     * @param userId 用户ID
+     * @return User
+     */
+    @Query("select u from User u where u.userId =:userId")
+    User findByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 按用户编码查询
+     * @param userCode 用户编码
+     * @return User
+     */
+    User findByUserCode(String userCode);
+
+```
+
+<a id="JPA0001">JPA</a>
+
+```yml
+spring:
+  application:
+    name: data-jpa
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/jpa
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true
+server:
+  port: 8085
+logging:
+  file:
+    name: ${spring.application.name}.log
+  pattern:
+    console: "%d{HH:mm:ss} -> [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    com:
+      springstudy:
+        jpa:
+          repository: DEBUG
+
+```
+
+<a id="APP0001">ApplicationContextInitializer.initialize()</a>
+
+```java
+public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
+  this.resourceLoader = resourceLoader;
+  Assert.notNull(primarySources, "PrimarySources must not be null");
+  this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
+  this.webApplicationType = WebApplicationType.deduceFromClasspath();
+  //META-INF/spring.factories
+  this.bootstrapRegistryInitializers = getBootstrapRegistryInitializersFromSpringFactories();
+  setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+  setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+  this.mainApplicationClass = deduceMainApplicationClass();
+}
+```
+
+<a id="RUN01">run()</a>
+
+```java
+public ConfigurableApplicationContext run(String... args) {
+  StopWatch stopWatch = new StopWatch();
+  stopWatch.start();
+  DefaultBootstrapContext bootstrapContext = createBootstrapContext();
+  ConfigurableApplicationContext context = null;
+  configureHeadlessProperty();
+  //获取Listeners 从META-INF/spring.factries
+  SpringApplicationRunListeners listeners = getRunListeners(args);
+  listeners.starting(bootstrapContext, this.mainApplicationClass);
+  try {
+     ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+    //创建环境 
+    ConfigurableEnvironment environment = prepareEnvironment(listeners, bootstrapContext, applicationArguments);
+    //配置环境
+    configureIgnoreBeanInfo(environment);
+    //启动头文件 可以自定义
+    Banner printedBanner = printBanner(environment);
+    //创建应用上下文 即创建IOC容器 AnnotationConfigServletWebServerApplicationContext
+    context = createApplicationContext();
+    //设置启动器 
+    context.setApplicationStartup(this.applicationStartup);
+    //准备上下文环境 
+    //applyInitializers(context); 回调之前保存好的Initialize方法
+		//listeners.contextPrepared(context); 回调之前SpringApplicationRunListener的contextPrepared方法
+    //listeners.contextLoaded(context) 运行完成后回调所有的springApplicationRunListener他的contextLoaded方法
+    prepareContext(bootstrapContext, context, environment, listeners, applicationArguments, printedBanner);
+    //刷新容器 ioc容器初始化过程 
+    refreshContext(context);
+    
+    afterRefresh(context, applicationArguments);
+    stopWatch.stop();
+    if (this.logStartupInfo) {
+       new StartupInfoLogger(this.mainApplicationClass).logStarted(getApplicationLog(), stopWatch);
+     }
+     listeners.started(context);
+    //从ioc容器中 所有 ApplicationRunner，CommandLineRunner
+     callRunners(context, applicationArguments);
+  }
+  catch (Throwable ex) {
+     handleRunFailure(context, ex, listeners);
+     throw new IllegalStateException(ex);
+  }
+
+  try {
+     listeners.running(context);
+  }
+  catch (Throwable ex) {
+     handleRunFailure(context, ex, null);
+     throw new IllegalStateException(ex);
+  }
+  return context;}
+```
 
 #### ce
 
@@ -505,6 +820,20 @@ spring.datasource.druid.aop-patterns= # Spring监控AOP切入点，如x.y.z.serv
 <a id="T00001">同一日志</a>
 
 ![click to enlarge](http://www.slf4j.org/images/legacy.png)
+
+<a id="IMG0009">add initializers</a>
+
+![image-20210604225441965](https://raw.githubusercontent.com/zbsilent/imag/main/%E5%8A%A0%E8%BD%BDinitiali)
+
+<a id="IMG00101">add Listeners</a>
+
+![image-20210604225543600](https://raw.githubusercontent.com/zbsilent/imag/main/image-20210604225543600.png)
+
+
+
+#
+
+
 
 ## Reference
 
