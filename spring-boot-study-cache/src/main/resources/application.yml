@@ -11,6 +11,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: spring-cache
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl

@@ -1,7 +1,9 @@
 package com.study.cache.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
