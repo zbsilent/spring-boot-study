@@ -26,7 +26,7 @@ public class UserService {
 
 
 
-    @Cacheable(cacheNames={"user"},condition = "#id>0" ,key = "#id")
+    @Cacheable(cacheNames={"user"},condition = "#id>0" ,key = "#id",unless="#result == null")
     public UserEntity getUser(int id){
         logger.debug("查询员工"+id+"，的信息");
         return userMapper.getUserById(id);

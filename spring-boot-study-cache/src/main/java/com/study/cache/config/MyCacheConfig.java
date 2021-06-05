@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -27,4 +28,5 @@ public class MyCacheConfig {
             }
         };
     }
+
 }

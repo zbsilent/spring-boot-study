@@ -26,8 +26,8 @@ class SpringBootStudyCacheApplicationTests {
     @Autowired
     private RedisTemplate  redisTemplate;
 
-    @Autowired
-    private RedisTemplate<Object, UserEntity> userRedisTemplate;
+//    @Autowired
+//    private RedisTemplate<Object, UserEntity> userRedisTemplate;
     @Test
     void contextLoads() {
 
@@ -50,7 +50,7 @@ class SpringBootStudyCacheApplicationTests {
         userEntity.setUserCode("7788");
         userEntity.setUserName("chendu");
         userEntity.setBirth(new Date());
-        userRedisTemplate.opsForValue().set("user-01",userEntity);
+        redisTemplate.opsForValue().set("user-01",userEntity);
         //redisTemplate.opsForValue().set("dp-2",userEntity);
         //userMapper.insertUser(userEntity);
     }
